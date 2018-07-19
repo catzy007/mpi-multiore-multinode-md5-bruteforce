@@ -36,7 +36,7 @@ char *strMD5(const char *str, int length, char *out){
 int main(int argc, char **argv){
 //some variables
 	int rank;
-	int processor=4; //amount of cores
+	int processor=16; //amount of cores
 	int i,j,k,mark=0; ///loop variable
 	int s1,s2,s3,s4; //loop variables for key generator
 	char temp[5]={'\0'}; //temporary variables for generated key (n+1)

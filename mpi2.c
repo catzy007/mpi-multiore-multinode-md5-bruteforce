@@ -10,7 +10,11 @@ int function(int arr[], int min, int max){
 	return temporary;
 }
 
+<<<<<<< HEAD
 int main(int argc, char **argv){
+=======
+int main(int *argc, char **argv){
+>>>>>>> 68146fe94c1355888b641769eefac8ffbe999d6c
 //some variables
 	int rank;
 	int processor=4; //amount of cores
