@@ -38,14 +38,13 @@ int main(int argc, char **argv){
 	int rank;
 	int processor; //amount of cores
 	int i,j,mark=0; ///loop variable
-	int s1,s2,s3,s4,s5,s6,s7,s8; //loop variables for key generator
-	int terminate=0,termval=1033;
+	int s1,s2,s3,s4,s5,s6,s7,s8,step=8; //loop variables for key generator
 	char temp[9]={'\0'}; //temporary variables for generated key (n+1)
 	char *out=malloc(sizeof(char)*33); //temporary0 md5 hash
 	char *hash; //temporary1 md5 hash
 	char dict[62]="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; //dictionary
 
-	char data[]="e2fc714c4727ee9395f324cd2e7f331f"; //testcase
+	char data[]="1e7f3459ad8a48f965f8e7a85bbd7ad2"; //testcase
 
 //initializing MPI
 	MPI_Init(&argc, &argv);
@@ -83,8 +82,8 @@ int main(int argc, char **argv){
 				temp[5]=dict[s3];
 				temp[6]=dict[s2];
 				temp[7]=dict[s1];
-				hash=strMD5(temp,4,out);
-				//printf("%d %d %s %s\n",rank,s1,temp,hash); //debug_line_can_be_removed
+				hash=strMD5(temp,sizeof(temp)/sizeof(char)-1,out);
+				printf("%d %s %s\n",rank,temp,hash); //debug_line_can_be_removed
 				//comparator algorithm begin
 				for(j=0;j<33;j++){
 					if(hash[j]==data[j]){
@@ -107,7 +106,7 @@ int main(int argc, char **argv){
 			}//s6
 			}//s7
 			}//s8
-			if(s4<62){
+			if(s8<62){
 				finalize0:
 				printf("Core %.2d - The Result Was : %s\n",rank,temp);
 				MPI_Abort(MPI_COMM_WORLD,MPI_SUCCESS);
