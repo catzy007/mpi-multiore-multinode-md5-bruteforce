@@ -39,17 +39,15 @@ int main(int argc, char **argv){
 	int processor; //amount of cores
 	int i,j,mark=0; ///loop variable
 	int s1,s2,s3,s4; //loop variables for key generator
-	int terminate=0,termval=1033;
 	char temp[5]={'\0'}; //temporary variables for generated key (n+1)
 	char *out=malloc(sizeof(char)*33); //temporary0 md5 hash
 	char *hash; //temporary1 md5 hash
 	char dict[62]="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; //dictionary
 
-	char data[]="d39934ce111a864abf40391f3da9cdf5"; //testcase
+	char data[]="4a7d1ed414474e4033ac29ccb8653d9b"; //testcase
 
 //initializing MPI
 	MPI_Init(&argc, &argv);
-	MPI_Request isreq, irreq;
 	MPI_Comm_size(MPI_COMM_WORLD, &processor); //get the core count
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank); //get the core rank
 
@@ -76,14 +74,7 @@ int main(int argc, char **argv){
 				temp[2]=dict[s2];
 				temp[3]=dict[s1];
 				hash=strMD5(temp,4,out);
-				//if termination code was received
-				MPI_Irecv(&terminate,1,MPI_INT,MPI_ANY_SOURCE,1,MPI_COMM_WORLD,&irreq);
-				if(terminate!=0){
-					free(hash);
-					MPI_Finalize();
-					goto finalize1;
-				}
-				//printf("%d %d %s %s\n",rank,s1,temp,hash); //debug_line_can_be_removed
+				//printf("%d %s %s\n",rank,temp,hash); //debug_line_can_be_removed
 				//comparator algorithm begin
 				for(j=0;j<33;j++){
 					if(hash[j]==data[j]){
@@ -98,22 +89,19 @@ int main(int argc, char **argv){
 				}else{
 					mark=0;
 				}
-			}//s1
-			}//s2
-			}//s3
-			}//s4
+			}
+			}
+			}
+			}
 			if(s4<62){
 				finalize0:
 				printf("Core %.2d - The Result Was : %s %s\n",rank,temp,hash);
-				//send the termination code
-				for(j=0;j<processor;j++){
-					MPI_Isend(&termval,1,MPI_INT,j,1,MPI_COMM_WORLD,&isreq);
-				}
+				MPI_Abort(MPI_COMM_WORLD,MPI_SUCCESS);
 			}
 		}
 	}
 
-	finalize1:
-	printf("done.\n");
+//MPI finalize
+	MPI_Finalize();
 	return 0;
 }
