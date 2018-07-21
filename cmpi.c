@@ -82,7 +82,7 @@ int main(int argc, char **argv){
 				temp[5]=dict[s3];
 				temp[6]=dict[s2];
 				temp[7]=dict[s1];
-				hash=strMD5(temp,sizeof(temp)/sizeof(char)-1,out);
+				hash=strMD5(temp,step,out);
 				//printf("%.2d %s %s\n",rank,temp,hash); //debug_line_can_be_removed
 				//comparator algorithm begin
 				for(j=0;j<33;j++){
