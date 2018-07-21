@@ -66,10 +66,10 @@ int main(int argc, char **argv){
 	for(i=0;i<processor;i++){
 		if(rank==i){
 			//key generator algorithm begin
-			for(s8=0;s2<62;s2++){
-			for(s7=0;s2<62;s2++){
-			for(s6=0;s2<62;s2++){
-			for(s5=0;s2<62;s2++){
+			for(s8=0;s2<62;s8++){
+			for(s7=0;s2<62;s7++){
+			for(s6=0;s2<62;s6++){
+			for(s5=0;s2<62;s5++){
 			for(s4=0;s4<62;s4++){
 			for(s3=0;s3<62;s3++){
 			for(s2=0;s2<62;s2++){
@@ -93,7 +93,6 @@ int main(int argc, char **argv){
 					}
 				}
 				if(mark==33){
-					free(hash);
 					goto finalize0;
 				}else{
 					mark=0;
@@ -109,6 +108,7 @@ int main(int argc, char **argv){
 			if(s8<62){
 				finalize0:
 				printf("Core %.2d - The Result Was : %s\n",rank,temp);
+				free(hash);
 				MPI_Abort(MPI_COMM_WORLD,MPI_SUCCESS);
 			}
 		}
