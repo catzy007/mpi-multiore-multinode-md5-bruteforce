@@ -45,7 +45,7 @@ int main(int argc, char **argv){
 	char *hash; //temporary1 md5 hash
 	char dict[62]="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; //dictionary
 
-	char data[]="e2fc714c4727ee9395f324cd2e7f331f"; //testcase
+	char data[]="d39934ce111a864abf40391f3da9cdf5"; //testcase
 
 //initializing MPI
 	MPI_Init(&argc, &argv);
