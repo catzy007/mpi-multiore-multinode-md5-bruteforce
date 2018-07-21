@@ -79,7 +79,6 @@ int main(int argc, char **argv){
 				//if termination code was received
 				MPI_Irecv(&terminate,1,MPI_INT,MPI_ANY_SOURCE,1,MPI_COMM_WORLD,&irreq);
 				if(terminate!=0){
-					free(hash);
 					goto finalize1;
 				}
 				//printf("%d %d %s %s\n",rank,s1,temp,hash); //debug_line_can_be_removed
@@ -113,6 +112,7 @@ int main(int argc, char **argv){
 	}
 
 	finalize1:
+	free(hash);
 	MPI_Finalize();
 	printf("done.\n");
 	return 0;
