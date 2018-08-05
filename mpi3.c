@@ -58,7 +58,10 @@ int main(int argc, char **argv){
 				for(k=0;k<33;k++){
 					if(temp[k]==data[k]){
 						mark++;
-					}
+					}else if(temp[k]!=data[k]){
+                                                break;
+                                        }
+
 				}
 				if(mark==33){
 					printf("Core %.2d - The Result Was : %c\n",rank,dict[j]);
@@ -78,7 +81,10 @@ int main(int argc, char **argv){
                                 for(k=0;k<33;k++){
                                         if(temp[k]==data[k]){
                                                 mark++;
+                                        }else if(temp[k]!=data[k]){
+                                                break;
                                         }
+
                                 }
                                 if(mark==33){
                                         printf("Core %.2d - The Result Was : %c\n",rank,dict[j]);
