@@ -53,9 +53,9 @@ int main(int argc, char **argv){
 		if(i==0 && rank==0){
 			printf("Hello From Core %.2d\n",rank);
 			//key generator algorithm begin
-               	 	for(s4=0;s4<62;s4++){
-               	 	for(s3=0;s3<62;s3++){
-               	 	for(s2=0;s2<62;s2++){
+			for(s4=0;s4<62;s4++){
+			for(s3=0;s3<62;s3++){
+			for(s2=0;s2<62;s2++){
 			for(s1=i;s1<62;s1+=processor){
 				temp[0]=dict[s4];
 				temp[1]=dict[s3];
@@ -90,9 +90,9 @@ int main(int argc, char **argv){
 		if(i>=1 && rank==i){
 			printf("Hello From Core %.2d\n",rank);
 			//key generator algorithm begin
-               	 	for(s4=0;s4<62;s4++){
-               	 	for(s3=0;s3<62;s3++){
-               	 	for(s2=0;s2<62;s2++){
+			for(s4=0;s4<62;s4++){
+			for(s3=0;s3<62;s3++){
+			for(s2=0;s2<62;s2++){
 			for(s1=i;s1<62;s1+=processor){
 				temp[0]=dict[s4];
 				temp[1]=dict[s3];
