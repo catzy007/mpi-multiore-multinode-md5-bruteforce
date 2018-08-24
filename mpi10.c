@@ -11,6 +11,16 @@
 
 //this program support up to 3844 core
 
+//some code to silently call function without error message
+//thanks to https://stackoverflow.com/questions/4760201/how-do-i-suppress-output-while-using-a-dynamic-library
+#define Q_CALL(function) {\
+	FILE* tmp = stderr;\
+	stderr = tmpfile();\
+	(function);\
+	fclose(stderr);\
+	stderr = tmp;\
+}
+
 //string to md5 function
 //thanks to https://stackoverflow.com/questions/7627723/how-to-create-a-md5-hash-of-a-string-in-c
 char *strMD5(const char *str, int length, char *out){
@@ -128,7 +138,7 @@ int main(int argc, char **argv){
 				printf("Core %.2d - The Result Was : %s\n",rank,temp);
 				printf("Done! You can ignore error message below.\n\n");
 				free(hash);
-				MPI_Abort(MPI_COMM_WORLD,MPI_SUCCESS); //keep using mpi abort until find better solution
+				Q_CALL(MPI_Abort(MPI_COMM_WORLD,MPI_SUCCESS)); //keep using mpi abort until find better solution
 			}
 		}
 	}
