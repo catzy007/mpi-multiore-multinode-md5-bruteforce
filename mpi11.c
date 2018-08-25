@@ -1,7 +1,6 @@
 #include <mpi.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 #include <string.h>
 #include <time.h>
 #include "openssl/md5.h"
@@ -53,17 +52,21 @@ void datetime(void){
 }
 
 int main(int argc, char **argv){
-//some variables
-	int rank,tst; //variable to store rank
-	int processor; //amount of cores
-	int i,j,mark=0; ///loop variable
-	int s1a,s2a,s1,s2,s3,s4,s5,s6,s7,s8,step=8;float s123; //loop variables for key generator
-	char temp[9]={'\0'}; //temporary variables for generated key (n+1)
-	char *out=malloc(sizeof(char)*33); //temporary0 md5 hash
-	char *hash; //temporary1 md5 hash
-	char dict[62]="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; //dictionary
+//put your md5 data below
+	char data[]="8315ead3918667a547bbb390185c362c"; //testcase or md5 data you want to break
+	int dataLen=sizeof(data)/sizeof(char); //md5 need 33 character. Can be changed to other algorithm if needed
 
-	char data[]="b5320b498808358b19baeb67bc43eb8b"; //testcase
+//some variables
+	char dict[]="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; //dictionary. add more or reduce as needed
+	int step=8; //currently this program support 8 step. Change this value and add more loop if needed
+	int dictLen=(sizeof(dict)/sizeof(char))-1; //default is 62 character
+	int rank,tst,processor; //variables to store mpi value
+	int i,j,mark=0; ///loop variables for comparator
+	int s1,s2,s3,s4,s5,s6,s7,s8; //loop variables for key generator
+	float s123,Ms123=(dictLen*dictLen*dictLen); //another loop variables for key generator
+	char *temp=malloc(sizeof(char)*step); //temporary variables for generated key
+	char *out=malloc(sizeof(char)*dataLen); //temporary0 md5 hash
+	char *hash; //temporary1 md5 hash
 
 //initializing MPI
 	MPI_Init(&argc, &argv);
@@ -76,6 +79,7 @@ int main(int argc, char **argv){
 		datetime();
 		printf("Data : %s\n",data);
 		printf("Hello From Core %.2d\n",rank);
+		//printf("%d %d\n",dictLen,dataLen); //debug_line_can_be_removed
 		for(i=1;i<processor;i++){
 			MPI_Recv(&tst,1,MPI_INT,i,1033,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
 			printf("Hello From Core %.2d\n",tst);
@@ -83,47 +87,45 @@ int main(int argc, char **argv){
 	}
 
 //mpi algorithm begin
-	//testing all core
+	//preparing all core
 	for(i=1;i<processor;i++){
 		if(rank==i){
-			//printf("Hello From Core %.2d\n",rank);
 			MPI_Send(&rank,1,MPI_INT,0,1033,MPI_COMM_WORLD);
 		}
 	}
 	for(i=0;i<processor;i++){
 		if(rank==i){
 			//key generator algorithm begin
-			for(s8=0;s8<62;s8++){
-			for(s7=0;s7<62;s7++){
-			for(s6=0;s6<62;s6++){
-			for(s5=0;s5<62;s5++){
-			for(s4=0;s4<62;s4++){
-			for(s123=i;s123<pow(62,3);s123+=processor){ //62^3=238328
-			s1=abs(s123)%62;
-			s2=abs(s123/62)%62;
-			s3=abs(s123/62/62)%62;
-				temp[0]=dict[s8];
-				temp[1]=dict[s7];
-				temp[2]=dict[s6];
-				temp[3]=dict[s5];
-				temp[4]=dict[s4];
-				temp[5]=dict[s3];
-				temp[6]=dict[s2];
-				temp[7]=dict[s1];
+			for(s8=0;s8<dictLen;s8++){
+			for(s7=0;s7<dictLen;s7++){
+			for(s6=0;s6<dictLen;s6++){
+			for(s5=0;s5<dictLen;s5++){
+			for(s4=0;s4<dictLen;s4++){
+			for(s123=i;s123<Ms123;s123+=processor){ //62^3=238328
+			s1=abs(s123)%dictLen;
+			s2=abs(s123/dictLen)%dictLen;
+			s3=abs(s123/dictLen/dictLen)%dictLen;
+				temp[0]=dict[s1];
+				temp[1]=dict[s2];
+				temp[2]=dict[s3];
+				temp[3]=dict[s4];
+				temp[4]=dict[s5];
+				temp[5]=dict[s6];
+				temp[6]=dict[s7];
+				temp[7]=dict[s8];
 				hash=strMD5(temp,step,out);
-				//printf("%.0f %s %s %d=%c %d=%c\n",s123,temp,hash,s2,dict[s2],s1,dict[s1]); //debug_line_can_be_removed
-				//system("sleep 1");
+				//printf("%s %s %d=%c %d=%c %d=%c\n",temp,hash,s1,dict[s1],s2,dict[s2],s3,dict[s3]); //debug_line_can_be_removed
 				//printf("%.2d %s %s\n",rank,temp,hash); //debug_line_can_be_removed
 				//comparator algorithm begin
-				for(j=0;j<33;j++){
+				for(j=0;j<dataLen;j++){
 					if(hash[j]==data[j]){
 						mark++;
 					}else if(hash[j]!=data[j]){
 						break;
 					}
 				}
-				if(mark==33){
-					goto finalize0;
+				if(mark==dataLen){
+					goto finalize;
 				}else{
 					mark=0;
 				}
@@ -133,12 +135,11 @@ int main(int argc, char **argv){
 			}//s6
 			}//s7
 			}//s8
-			if(s8<62 && mark==33){
-				finalize0:
+			if(mark==dataLen){
+				finalize:
 				datetime();
-				printf("Core %.2d - The Result Was : %s\n",rank,temp);
-				printf("Done! You can ignore error message below.\n\n");
-				free(hash);
+				printf("Core %.2d - The Result Was : %s\nDone!\n",rank,temp);
+				free(hash);free(temp);
 				Q_CALL(MPI_Abort(MPI_COMM_WORLD,MPI_SUCCESS)); //keep using mpi abort until find better solution
 			}
 		}
