@@ -3,6 +3,8 @@ hostfile="$1"
 if [ -z "$hostfile" ]; then
 	echo "Usage : "
 	echo "  ./run.sh <hostfile>"
+	echo "  or"
+	echo "  ./run.sh -reset"
 	echo
 	echo "hostfile : "
 	echo "  a filename that lists hosts on which to launch MPI processes"
@@ -14,6 +16,11 @@ if [ -z "$hostfile" ]; then
 	echo "      192.168.1.251:4"
 	echo "      192.168.1.252:4"
 	echo "      192.168.1.253:4"
+	echo
+	echo "-reset : "
+	echo " reset state for new project"
+elif [ "$1" = "-reset" ]; then
+	rm -rf resumestate.cfg
 else
 	mpicc cmpi.c -o cmpi -lcrypto
 	mpiexec --hostfile ${hostfile} ./cmpi
