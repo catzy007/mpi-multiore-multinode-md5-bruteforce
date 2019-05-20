@@ -34,5 +34,6 @@ void main(){
 	if(corechecker(rsmcfg) == 0){
 		corewrite("0\n0\n0\n0\n0", rsmcfg);
 	}
+	coreread(rsmcfg);
 	//printf("%s\n",corechecker(rsmcfg)?"exist":"not");
 }
