@@ -12,28 +12,44 @@ int corechecker(char *filename){
 	}
 }
 
-void corewrite(char *string, char *filename){
-  FILE *file1;
-  file1=fopen(filename,"w");
-  fprintf(file1,"%s",string);
-  fclose(file1);
+void corewrite(char *filename, float s123, int s4, int s5,
+                 int s6, int s7, int s8){
+	FILE *file1;
+	file1=fopen(filename,"w");
+	fprintf(file1,"%f\n%d\n%d\n%d\n%d\n%d",s123,s4,s5,s6,s7,s8);
+	fclose(file1);
 }
 
-void coreread(char *filename){
-  FILE *file1;
-  file1=fopen(filename,"r");
-  char text[255];
-  int loop=1;
-  while(fgets(text,sizeof(text),file1)!= NULL){
-    printf("%.2d - %s",loop++,text);
-  }
-  fclose(file1);
+void coreread(char *filename, float *s123, int *s4, int *s5,
+		 int *s6, int *s7, int *s8){
+	FILE *file1;
+	file1=fopen(filename,"r");
+	char text[255];
+	fgets(text,sizeof(text),file1);
+		*s123 = atof(text);
+	fgets(text,sizeof(text),file1);
+		*s4 = atoi(text);
+	fgets(text,sizeof(text),file1);
+		*s5 = atoi(text);
+	fgets(text,sizeof(text),file1);
+		*s6 = atoi(text);
+	fgets(text,sizeof(text),file1);
+		*s7 = atoi(text);
+	fgets(text,sizeof(text),file1);
+		*s8 = atoi(text);
+	fclose(file1);
 }
 
 void main(){
+	int s8=0,s7=0,s6=0,s5=0,s4=0;
+	float s123=0;
+	//write files
 	if(corechecker(rsmcfg) == 0){
-		corewrite("0\n0\n0\n0\n0", rsmcfg);
+		corewrite(rsmcfg,123,4,5,6,7,8);
 	}
-	coreread(rsmcfg);
-	//printf("%s\n",corechecker(rsmcfg)?"exist":"not");
+	//read files
+	if(corechecker(rsmcfg) != 0){
+		coreread(rsmcfg,&s123,&s4,&s5,&s6,&s7,&s8);
+	}
+	printf("%f %d %d %d %d %d\n",s123,s4,s5,s6,s7,s8);
 }
