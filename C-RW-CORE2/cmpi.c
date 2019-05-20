@@ -4,6 +4,7 @@
 #include <string.h>
 #include <time.h>
 #include "openssl/md5.h"
+#include "resumer.h"
 
 //compile with mpicc cmpi.c -o cmpi -lcrypto
 //this test program uses md5 library from openssl
@@ -68,6 +69,18 @@ int main(int argc, char **argv){
 	char *out=malloc(sizeof(char)*dataLen); //temporary0 md5 hash
 	char *hash; //temporary1 md5 hash
 
+//get value from resumer config
+	//temporary var
+	int t4, t5, t6, t7, t8;
+
+	//getter
+        if(corechecker(rsmcfg) != 0){
+                coreread(rsmcfg, &t4, &t5, &t6, &t7, &t8);
+        }else{
+                t4=0; t5=0; t6=0;
+                t7=0; t8=0;
+        }
+
 //initializing MPI
 	MPI_Init(&argc, &argv);
 	MPI_Comm_size(MPI_COMM_WORLD, &processor); //get the core count
@@ -95,46 +108,48 @@ int main(int argc, char **argv){
 	}
 	for(i=0;i<processor;i++){
 		if(rank==i){
-			//key generator algorithm begin
-			for(s8=0;s8<dictLen;s8++){
-			for(s7=0;s7<dictLen;s7++){
-			for(s6=0;s6<dictLen;s6++){
-			for(s5=0;s5<dictLen;s5++){
-			for(s4=0;s4<dictLen;s4++){
-			for(s123=i;s123<Ms123;s123+=processor){ //62^3=238328
-			s1=abs(s123)%dictLen;
-			s2=abs(s123/dictLen)%dictLen;
-			s3=abs(s123/dictLen/dictLen)%dictLen;
-				temp[0]=dict[s1];
-				temp[1]=dict[s2];
-				temp[2]=dict[s3];
-				temp[3]=dict[s4];
-				temp[4]=dict[s5];
-				temp[5]=dict[s6];
-				temp[6]=dict[s7];
-				temp[7]=dict[s8];
-				hash=strMD5(temp,step,out);
-				//printf("%s %s %d=%c %d=%c %d=%c\n",temp,hash,s1,dict[s1],s2,dict[s2],s3,dict[s3]); //debug_line_can_be_removed
-				//printf("%.2d %s %s\n",rank,temp,hash); //debug_line_can_be_removed
-				//comparator algorithm begin
-				for(j=0;j<dataLen;j++){
-					if(hash[j]==data[j]){
-						mark++;
-					}else if(hash[j]!=data[j]){
-						break;
-					}
+		//key generator algorithm begin
+		 for(s8=t8; s8<dictLen; s8++){
+		  for(s7=t7; s7<dictLen; s7++){
+		   for(s6=t6; s6<dictLen; s6++){
+		    for(s5=t5; s5<dictLen; s5++){
+		     for(s4=t4; s4<dictLen; s4++){
+		      //write to resumer config
+		       corewrite(rsmcfg,s123,s4,s5,s6,s7,s8);
+		      for(s123=i; s123<Ms123; s123+=processor){ //62^3=238328
+		       s1=abs(s123)%dictLen;
+		       s2=abs(s123/dictLen)%dictLen;
+		       s3=abs(s123/dictLen/dictLen)%dictLen;
+			temp[0]=dict[s1];
+			temp[1]=dict[s2];
+			temp[2]=dict[s3];
+			temp[3]=dict[s4];
+			temp[4]=dict[s5];
+			temp[5]=dict[s6];
+			temp[6]=dict[s7];
+			temp[7]=dict[s8];
+			hash=strMD5(temp,step,out);
+			//printf("%s %s %d=%c %d=%c %d=%c\n",temp,hash,s1,dict[s1],s2,dict[s2],s3,dict[s3]); //debug_line_can_be_removed
+			//printf("%.2d %s %s\n",rank,temp,hash); //debug_line_can_be_removed
+			//comparator algorithm begin
+			for(j=0;j<dataLen;j++){
+				if(hash[j]==data[j]){
+					mark++;
+				}else if(hash[j]!=data[j]){
+					break;
 				}
-				if(mark==dataLen){
-					goto finalize;
-				}else{
-					mark=0;
-				}
-			}//s123
-			}//s4
-			}//s5
-			}//s6
-			}//s7
-			}//s8
+			}
+			if(mark==dataLen){
+				goto finalize;
+			}else{
+				mark=0;
+			}
+		      }//s123
+		     }//s4
+		    }//s5
+		   }//s6
+		  }//s7
+		 }//s8
 			if(mark==dataLen){
 				finalize:
 				datetime();
