@@ -7,6 +7,9 @@
 ### Usage
 `./run.sh hostfile`
 
+### Resumer
+this program can return your last step. Even after random reboot/shutdown, power outage, etc. No reset required.
+
 ### Hostfile
 a filename that lists hosts on which to launch MPI processes
 * example:
