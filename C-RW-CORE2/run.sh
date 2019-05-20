@@ -16,5 +16,5 @@ if [ -z "$hostfile" ]; then
 	echo "      192.168.1.253:4"
 else
 	mpicc cmpi.c -o cmpi -lcrypto
-	mpiexec --hostfile ${hostfile} ./cmpi
+#	mpiexec --hostfile ${hostfile} ./cmpi
 fi

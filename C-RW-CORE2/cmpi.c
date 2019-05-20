@@ -115,7 +115,7 @@ int main(int argc, char **argv){
 		    for(s5=t5; s5<dictLen; s5++){
 		     for(s4=t4; s4<dictLen; s4++){
 		      //write to resumer config
-		       corewrite(rsmcfg,s123,s4,s5,s6,s7,s8);
+		       corewrite(rsmcfg,s4,s5,s6,s7,s8);
 		      for(s123=i; s123<Ms123; s123+=processor){ //62^3=238328
 		       s1=abs(s123)%dictLen;
 		       s2=abs(s123/dictLen)%dictLen;
