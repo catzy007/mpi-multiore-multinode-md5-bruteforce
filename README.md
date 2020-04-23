@@ -1,4 +1,4 @@
-## Simple C program implementing Message Parsing Interface (MPI) with MD5 Brute force
+## Simple C program implementing Message Passing Interface (MPI) with MD5 Brute force
 
 ### Dependency
 * [MPICH](https://www.mpich.org/downloads/) or via apt `sudo apt install mpich`
