@@ -1,14 +1,11 @@
-## Simple C program implementing Message Passing Interface (MPI) with MD5 Brute force
+## C program implementing Message Passing Interface (MPI) with MD5 Brute force
 
 ### Dependency
 * [MPICH](https://www.mpich.org/downloads/) or via apt `sudo apt install mpich`
 * libssl `sudo apt install libssl-dev`
 
 ### Usage
-`./run.sh hostfile`
-
-### Resumer
-this program can return your last step. Even after random reboot/shutdown, power outage, etc. No reset required.
+`./run.sh -r hostfile`
 
 ### Hostfile
 a filename that lists hosts on which to launch MPI processes
@@ -26,20 +23,36 @@ a filename that lists hosts on which to launch MPI processes
     ```
 ### Sample Output
 ```
-MPI MD5 BREAKER
-Core : 8
-Date : 2019/05/11 - 23:33:16
-Data : 8315ead3918667a547bbb390185c362c
-Hello From Core 00
-Hello From Core 01
-Hello From Core 02
-Hello From Core 03
-Hello From Core 04
-Hello From Core 05
-Hello From Core 06
-Hello From Core 07
-Date : 2019/05/11 - 23:33:20
-Core 07 - The Result Was : ZZZZ0000
+MPI MD5 BREAKER V2.0
+Size : 24
+Date : 2020/04/23 - 23:14:53
+Test : 4c467321dd2d571a787706eb4466a09d
+Hello From Thread 00
+Hello From Thread 01
+Hello From Thread 02
+Hello From Thread 03
+Hello From Thread 04
+Hello From Thread 05
+Hello From Thread 06
+Hello From Thread 07
+Hello From Thread 08
+Hello From Thread 09
+Hello From Thread 10
+Hello From Thread 11
+Hello From Thread 12
+Hello From Thread 13
+Hello From Thread 14
+Hello From Thread 15
+Hello From Thread 16
+Hello From Thread 17
+Hello From Thread 18
+Hello From Thread 19
+Hello From Thread 20
+Hello From Thread 21
+Hello From Thread 22
+Hello From Thread 23
+Date : 2020/04/24 - 01:31:49
+Core 08 - The Result Was : ZZZZZZ
 Done!
 ```
 
