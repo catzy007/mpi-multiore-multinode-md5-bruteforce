@@ -1,7 +1,8 @@
 ## C program implementing Message Passing Interface (MPI) with MD5 Brute force
 
 ### Dependency
-* [MPICH](https://www.mpich.org/downloads/) or via apt `sudo apt install mpich`
+* compiler `sudo apt install build-essential`
+* [MPICH](https://www.mpich.org/downloads/) or via apt `sudo apt install mpich libmpich-dev`
 * libssl `sudo apt install libssl-dev`
 
 ### Usage
