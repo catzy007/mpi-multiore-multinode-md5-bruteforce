@@ -6,7 +6,7 @@
 #include <mpi.h>
 
 void main(int argc, char **argv){
-    char data[]="4c467321dd2d571a787706eb4466a09d";
+    char data[]="aa6df57fb6fe377d80b4a257b4a92cba";
     int rank,reply,size;
 
 //initializing MPI
