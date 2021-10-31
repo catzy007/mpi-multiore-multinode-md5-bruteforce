@@ -20,11 +20,12 @@ void main(int argc, char **argv){
         printf("Size : %d\n",size);
 		datetime();
 		printf("Test : %s\n",data);
-		printf("Hello From Thread %.2d\n",rank);
+		printf("Preparing core and thread");
+		printf("Status OK From Thread %.2d\n",rank);
 		//printf("%d %d\n",dictLen,dataLen); //debug_line_can_be_removed
 		for(int i=1; i<size; i++){
 			MPI_Recv(&reply,1,MPI_INT,i,1033,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-			printf("Hello From Thread %.2d\n",reply);
+			printf("Status OK From Thread %.2d\n",reply);
 		}
 	}
 //preparing all thread
