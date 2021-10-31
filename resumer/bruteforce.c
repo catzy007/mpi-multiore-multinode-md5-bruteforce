@@ -5,8 +5,8 @@
 
 void bruteforce(int length, int rank, int size, char *test){
     char out[33];
-    char dict[] = {"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
-    int dictLen=(sizeof(dict)/sizeof(char))-1;
+    char chrset[] = {"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+    int chrsetLen=(sizeof(chrset)/sizeof(char))-1;
 
     char *progress;
     progress = malloc(sizeof(char)*length);
@@ -22,11 +22,11 @@ void bruteforce(int length, int rank, int size, char *test){
     //bruteforce algorithm
     long loop=rank-1;
     while(1){
-        // printf("%ld %d %d %d\n",loop,length,dictLen,idxProgress[length-1]);
+        // printf("%ld %d %d %d\n",loop,length,chrsetLen,idxProgress[length-1]);
         // for(int i=0; i<length; i++){
         //     printf("%d ",idxProgress[i]);
         // }
-        indexToText(idxProgress, progress, dict, length);
+        indexToText(idxProgress, progress, chrset, length);
         if(compareResult(strMD5(progress,progressLen(progress,length),out), test, 33)){
             datetime();
             printf("Thread %.2d - The Result Was : %s\nDone!\n",rank,progress);
@@ -37,22 +37,22 @@ void bruteforce(int length, int rank, int size, char *test){
 
         for(int i=0; i<length; i++){
             if(i<3){
-                idxProgress[0] = abs(loop)%dictLen;
-                idxProgress[1] = abs(loop/dictLen)%dictLen;
-                idxProgress[2] = abs(loop/dictLen/dictLen)%dictLen;
-                if(loop > (dictLen*dictLen*dictLen)-1){
+                idxProgress[0] = abs(loop)%chrsetLen;
+                idxProgress[1] = abs(loop/chrsetLen)%chrsetLen;
+                idxProgress[2] = abs(loop/chrsetLen/chrsetLen)%chrsetLen;
+                if(loop > (chrsetLen*chrsetLen*chrsetLen)-1){
                     idxProgress[3] += 1;
                     loop = rank-1;
                 }
             }
-            if(idxProgress[i] > dictLen-1 && i>2){
+            if(idxProgress[i] > chrsetLen-1 && i>2){
                 idxProgress[i+1] += 1;
                 idxProgress[i] = 0;
             }
         }
         loop+=size;
 
-        //printf("--%d %d\n",idxProgress[length-1],dictLen-1);
+        //printf("--%d %d\n",idxProgress[length-1],chrsetLen-1);
         if(idxProgress[length] >= 1){
             break;
         }
@@ -62,12 +62,12 @@ void bruteforce(int length, int rank, int size, char *test){
     free(idxProgress);
 }
 
-void indexToText(int *idxProgress, char *progress, char *dict, int length){
+void indexToText(int *idxProgress, char *progress, char *chrset, int length){
     for(int i=0; i<length; i++){
         if(idxProgress[i] < 0){
             progress[i] = '\0';
         }else{
-            progress[i] = dict[idxProgress[i]];
+            progress[i] = chrset[idxProgress[i]];
         }
     }
 }

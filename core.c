@@ -37,12 +37,4 @@ void main(int argc, char **argv){
 
 //start bruteforce
     bruteforce(8,rank,size,data);
-
-    //printf("%d\n",compareResult("5ccdb2d575e9dedb8bc91968c24093b1","5ccdb2d575e9dedb8bc91968c24093b1",33));
-    
-    // corechecker("hello.cfg");
-    // corewrite("hello.cfg", 1, 2, 3, 4, 5);
-    // int a,b,c,d,e;
-    // coreread("hello.cfg", &a, &b, &c, &d, &e);
-    // printf("%d %d %d %d %d",a,b,c,d,e);
 }
