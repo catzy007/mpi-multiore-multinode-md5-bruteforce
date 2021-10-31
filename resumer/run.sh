@@ -7,6 +7,7 @@ case $key in
     -r|--run)
         gcc -c md5parser.c -lcrypto
         gcc -c datetime.c
+        gcc -c resumestate.c
         mpicc -c bruteforce.c
         mpicc -c core.c
         mpicc *.o -o core -lcrypto
@@ -16,18 +17,19 @@ case $key in
     -c|--compile)
         gcc -c md5parser.c -lcrypto
         gcc -c datetime.c
+        gcc -c resumestate.c
         mpicc -c bruteforce.c
         mpicc -c core.c
         mpicc *.o -o core -lcrypto
         rm *.o
-        echo "Compilation completed!"
+        echo "Compilation has completed!"
     ;;
     *)
         echo "-c --compile"
-        echo "   Only compile the program"
+        echo "   only compile the program"
         echo "-r --run"
-        echo "   Compile the program and execute it"
+        echo "   compile the program and execute it"
         echo "-h --help"
-        echo "   Show this help message"
+        echo "   show this help message"
     ;;
 esac
