@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "md5parser.h"
 #include "datetime.h"
-#include "resumestate.h"
 #include "bruteforce.h"
 #include <mpi.h>
 
